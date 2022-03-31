@@ -13,16 +13,16 @@ public class BaseClass
         given().baseUri("https://jsonplaceholder.typicode.com").
                 header("Content-Type","application/json").
                 when().get("/posts").
-                then().body("id",hasItem(40),"userId",hasItem(4))
+                then().body("id",hasItem(40),"userId",hasItem(4),"title[39]",equalTo("enim quo cumque"))
                 .statusCode(200);
     }
     @Test
     public void put_call()
     {
-        File JsonData=new File("C:\\Users\\ksaravanakumar\\postmanmini\\src\\main\\resources\\putdata.json");
+        File Data=new File("C:\\Users\\ksaravanakumar\\postmanmini\\src\\main\\resources\\putdata.json");
         given().
                 baseUri("https://reqres.in/api/users").
-                body(JsonData).
+                body(Data).
                 header("Content-Type","application/json").
                 when().
                 put("/users").
