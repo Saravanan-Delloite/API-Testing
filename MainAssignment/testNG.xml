@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="src.test.java">
+    <test name="mainAssignment">
+        <classes>
+            <class name="TestCase1.userTestCase"></class>
+        </classes>
+    </test>
+</suite>
