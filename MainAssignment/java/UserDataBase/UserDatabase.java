@@ -22,9 +22,6 @@ public class UserDatabase
 {
     String UserName = null, UserEmail = null, UserPassword = null,UserAge = null;
     public String token;
-
-
-
     public HashMap registerUser() throws Exception
     {
         String path = "src\\test\\Resources\\Book1.xlsx";
@@ -73,7 +70,6 @@ public class UserDatabase
         HashMap hashMap;
         hashMap=userDetails.registerUser();
         String authToken= (String) hashMap.get("token");
-        //System.out.println(authToken);
         Response response =
             given().
                     baseUri("https://api-nodejs-todolist.herokuapp.com").header("Content-Type", "application/json").auth().oauth2(authToken).
@@ -81,9 +77,7 @@ public class UserDatabase
                     get(Uri).
                     then().
                     extract().response();
-        //System.out.println(response.asString());
         JSONObject jsonObject=new JSONObject(response.asString());
-        //System.out.println(jsonObject.get("count"));
         return (int) jsonObject.get("count");
     }
 }

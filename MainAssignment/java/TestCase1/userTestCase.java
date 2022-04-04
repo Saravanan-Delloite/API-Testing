@@ -56,7 +56,6 @@ public class userTestCase
         HashMap hashmap;
         UserDatabase user =new UserDatabase();
         hashmap = user.registerUser();
-        System.out.println(hashmap);
         Response response = requestSpecification.
                 body(hashmap).
                 when().
@@ -65,8 +64,14 @@ public class userTestCase
                 spec(responseSpecification).
                 extract().
                 response();
-        Assert.assertEquals(response.statusCode(),201);
-        System.out.println(createToken);
+        try {
+                Assert.assertEquals(response.statusCode(), 201);
+                test.pass("registration Successful");
+        }
+        catch (Exception e)
+        {
+            test.fail("registration Unsuccessful");
+        }
     }
     @Test(priority = 2)
     public void loginUserTest() throws Exception
@@ -84,13 +89,21 @@ public class userTestCase
                 then().spec(responseSpecification).
                 extract().
                 response();
-        Assert.assertEquals(response.statusCode(),200);
+        try {
+            Assert.assertEquals(response.statusCode(), 200);
+            test.pass("User Login successfully");
+        }
+        catch (AssertionError e)
+        {
+            test.fail("Login Failed");
+        }
+
         JSONObject object=new JSONObject(response.asString());
         createToken=object.getString("token");
         user.registerToken(createToken);
     }
     @Test(priority = 3)
-    public void validToken() throws Exception
+    public void validCresdentials() throws Exception
     {
         UserDatabase user =new UserDatabase();
         HashMap hashMap;
@@ -105,36 +118,41 @@ public class userTestCase
         String CheckUserName = object.getString("name");
         String CheckUserEmail = object.getString("email");
         String CheckUSerAge = String.valueOf(object.getInt("age"));
-        Assert.assertEquals(CheckUserName,hashMap.get("name"));
-        Assert.assertEquals(CheckUserEmail,hashMap.get("email"));
-        Assert.assertEquals(CheckUSerAge,hashMap.get("age"));
+        try {
+            Assert.assertEquals(CheckUserName, hashMap.get("name"));
+            Assert.assertEquals(CheckUserEmail, hashMap.get("email"));
+            Assert.assertEquals(CheckUSerAge, hashMap.get("age"));
+            test.pass("The user details are correct");
+        }
+        catch (AssertionError e)
+        {
+            test.fail("The user details are incorrect");
+        }
+
     }
-    @Test(priority = 4)
-    public void callPagination1() throws Exception
+    @Test
+    public void negativetestcase1()
     {
-        UserDatabase userDatabase=new UserDatabase();
-        int check1=userDatabase.paginationCheck("/task?limit=2");
-        Assert.assertEquals(check1,2);
-        test.pass("Pagination 1 ran for 2");
-        logger.info("Pagination 1 successfully ran for 2");
-    }
-    @Test(priority = 5)
-    public void callPagination2() throws Exception
-    {
-        UserDatabase userDatabase=new UserDatabase();
-        int check2=userDatabase.paginationCheck("/task?limit=5");
-        Assert.assertEquals(check2,5);
-        test.pass("Pagination 1 ran for 5");
-        logger.info("Pagination  ran successfully for 5");
-    }
-    @Test(priority = 6)
-    public void callPagination3() throws Exception
-    {
-        UserDatabase userDatabase=new UserDatabase();
-        int check3=userDatabase.paginationCheck("/task?limit=10");
-        Assert.assertEquals(check3,10);
-        test.pass("Pagination  ran for 10");
-        logger.info("Pagination  ran successfully for 10");
+        HashMap Hash = new HashMap<>();
+        Hash.put("email","saravan");
+        Hash.put("password","helo@123");
+        Response response = requestSpecification.
+                body(Hash).
+                when().
+                post("/user/login").
+                then().spec(responseSpecification).
+                extract().
+                response();
+        try
+        {
+                Assert.assertEquals(response.statusCode(), 200);
+                test.pass("User Login successfully");
+
+        }
+        catch (AssertionError e)
+        {
+            test.fail("User Login Failed");
+        }
     }
     @AfterClass
     public void end()
