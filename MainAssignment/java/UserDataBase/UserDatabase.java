@@ -3,6 +3,8 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -20,6 +22,7 @@ public class UserDatabase
 {
     String UserName = null, UserEmail = null, UserPassword = null,UserAge = null;
     public String token;
+
 
 
     public HashMap registerUser() throws Exception
